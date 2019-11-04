@@ -1,0 +1,12 @@
+{
+    "measurement": "",
+    "tags": {
+        "garden-id": "my-house",
+        "plant-type": "capsicum",
+        "plant-id": "001",
+        "timezone": "Australia/Brisbane",
+        "location": "-27.000000, 153.000000"
+    },
+    "fields": {
+    }
+}

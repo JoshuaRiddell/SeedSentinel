@@ -18,7 +18,7 @@ class Arduino():
 
     def read_sensors_with_retry(self):
         for i in range(5):
-            self._read_from_arduino()
+            self._try_read_from_arduino()
             if self._data_is_valid():
                 return self._arduino_data
             time.sleep(1)
@@ -26,7 +26,7 @@ class Arduino():
         raise Exception("Could not read valid data from Arduino.")
     
     def read_sensors(self):
-        self._read_from_arduino()
+        self._try_read_from_arduino()
         if self._data_is_valid():
             return self._arduino_data
         

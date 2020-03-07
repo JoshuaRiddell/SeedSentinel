@@ -11,8 +11,7 @@ class DatabaseInterface(object):
             pi_password = pw_fd.read().strip()
 
         # connect to the database
-        self.client = InfluxDBClient(url, 8086, 'pi', pi_password,
-                        database='garden', ssl=True, verify_ssl=True)
+        self.client = InfluxDBClient(url, 8086, 'pi', pi_password, database='garden')
 
         # save the request template in ram for easy access
         self.request_template = {}
@@ -32,10 +31,9 @@ class DatabaseInterface(object):
         }
         self.log_measurement("atmosphere", fields, plant_type, plant_id)
     
-    def log_environmental(self, light, rainfall, plant_type="", plant_id=0):
+    def log_environmental(self, light, plant_type="", plant_id=0):
         fields = {
             "light": light,
-            "rainfall": rainfall,
         }
         self.log_measurement("environmental", fields, plant_type, plant_id)
 

@@ -41,7 +41,7 @@ private:
   }
 
   double readAnalogPinAsPercentage() {
-    return analogRead(readPin) / 1023.;
+    return analogRead(readPin) / 1023. * 100.;
   }
 
   int powerPin;

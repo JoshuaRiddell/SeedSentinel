@@ -3,6 +3,6 @@
 class Light : public AnalogPower {
 public:
   double readLightPercentage() {
-    return 1.-readAnalogPercentage();
+    return 100.-readAnalogPercentage();
   }
 };

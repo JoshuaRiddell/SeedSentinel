@@ -1,0 +1,8 @@
+[Unit]
+Description=SeedSentinel
+
+[Service]
+User=pi
+Type=oneShot
+WorkingDirectory=/home/pi/SeedSentinel/pi
+ExecStart=/home/pi/SeedSentinel/pi/take_measurement.py

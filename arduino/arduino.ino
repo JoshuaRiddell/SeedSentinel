@@ -1,13 +1,13 @@
 #include "moisture.h"
 #include "light.h"
 #include "DHT.h"
+#include <ArduinoJson.h>
 
 Moisture moisture;
 Light light;
 DHT dht(4, DHT11);
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
 
   moisture.setPowerPin(2);
@@ -22,13 +22,35 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.print(moisture.readMoisturePercentage());
-  Serial.print(", ");
-  Serial.print(light.readLightPercentage());
-  Serial.print(", ");
-  Serial.print(dht.readHumidity());
-  Serial.print(", ");
-  Serial.println(dht.readTemperature());
-  delay(100);
+  waitForSerialAvailable();
+  if (getDataCommandReceived()) {
+    sendJsonData();
+  }
+}
+
+void waitForSerialAvailable() {
+  while (!Serial.available());
+}
+
+bool getDataCommandReceived() {
+  return Serial.read() == '?';
+}
+
+void sendJsonData() {
+  StaticJsonDocument<1024> doc;
+  buildJson(doc);
+  sendJsonAsString(doc);
+}
+
+void buildJson(StaticJsonDocument<1024> &doc) {
+  doc["moisture"] = moisture.readMoisturePercentage();
+  doc["light"] = light.readLightPercentage();
+  doc["humidity"] = dht.readHumidity();
+  doc["temperature"] = dht.readTemperature();
+}
+
+void sendJsonAsString(StaticJsonDocument<1024> &doc) {
+  String output;
+  serializeJson(doc, output);
+  Serial.println(output);
 }

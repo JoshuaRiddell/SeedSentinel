@@ -4,6 +4,8 @@
 #include <ArduinoJson.h>
 #include <RF24.h>
 
+#include "printf.h"
+
 Moisture moisture;
 Light light;
 DHT dht(4, DHT11);
@@ -17,6 +19,7 @@ void setup() {
   digitalWrite(7, LOW);
   
   Serial.begin(115200);
+  printf_begin();
 
   moisture.setPowerPin(2);
   moisture.setReadPin(A0);
@@ -31,6 +34,10 @@ void setup() {
   radio.begin();
   radio.openWritingPipe(address);
   radio.stopListening();
+  radio.setRetries(5, 15);
+  radio.setDataRate(RF24_250KBPS);
+  
+  radio.printDetails();
 }
 
 void loop() {
@@ -67,6 +74,25 @@ void sendJsonAsString(StaticJsonDocument<1024> &doc) {
   serializeJson(doc, output);
   Serial.println(output);
 
-  char text[] = "Hello world";
-  radio.write(text, sizeof(text));
+  sendStringOnRadio(output);
+}
+
+void sendStringOnRadio(String output) {
+  int transmissionCount = output.length() / 30 + 1;
+  char buff[32];
+
+  for (int i = 0; i < transmissionCount; ++i) {
+    memset(buff, 0, 32);
+    
+    buff[0] = i;
+    buff[1] = transmissionCount;
+    strcpy(buff+2, output.substring(i*30, i*30+30).c_str());
+    radio.write(buff, sizeof(buff));
+
+    Serial.print(i);
+    Serial.print(",   ");
+    Serial.print(transmissionCount);
+    Serial.print(",   ");
+    Serial.println(&(buff[2]));
+  }
 }

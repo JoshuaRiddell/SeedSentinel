@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [seed_sentinel.PrjPcb]
+   Generated File[seed_sentinel.TXT]
+   Generated File[seed_sentinel.LDP]
+   Generated File[seed_sentinel.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 11:47:27 AM On 6/08/2021
